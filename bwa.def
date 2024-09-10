@@ -1,0 +1,5 @@
+Bootstrap: docker
+From: jakeconway/bwa-0.5.9:latest
+
+%post
+    chmod 755 /root

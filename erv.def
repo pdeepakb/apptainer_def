@@ -1,0 +1,3 @@
+Bootstrap: docker
+From: docker://arielyh/erv_pipeline:v2
+

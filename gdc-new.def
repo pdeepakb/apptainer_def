@@ -1,0 +1,57 @@
+Bootstrap: docker
+From: python:3.8
+
+%labels
+    Maintainer Deepak Poduval <poduval.deepak.b@gmail.com>
+
+%post
+    # Update and install necessary packages
+    apt-get update && apt-get install -y \
+        unzip \
+        python3-dev \
+        git \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Install virtualenv and pyinstaller via pip
+    pip install --upgrade pip
+    pip install virtualenv pyinstaller
+
+    # Clone the gdc-client repository from GitHub
+    export gdc=/gdc-client
+    mkdir -p ${gdc}
+    cd ${gdc}
+    git clone https://github.com/NCI-GDC/gdc-client .
+
+    # Change to the bin directory and invoke the package script
+    cd ${gdc}/bin
+    bash package
+    
+    # Unzip the resulting zip file (containing the executable) and move to bin
+    unzip -o *.zip -d ${gdc}/bin/
+    rm *.zip
+ 
+
+    # Create the /home directory
+    mkdir -p /home
+
+    # Print the PATH for debugging
+    echo "PATH during build: $PATH"
+    
+    # Verify the contents of the /gdc-client/bin directory
+    ls -l /gdc-client/bin
+
+%environment
+    # Add gdc binary to the PATH for runtime environment
+    export PATH=/gdc-client/bin:$PATH
+
+%runscript
+    # Run the gdc-client binary
+    exec gdc-client "$@"
+
+%test
+    # Verify that gdc-client is in the PATH
+    echo "PATH during test: $PATH"
+    ls -l /gdc-client/bin
+    which gdc-client
+    gdc-client --help
+

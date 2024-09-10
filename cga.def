@@ -1,0 +1,5 @@
+Bootstrap: docker
+From: gcr.io/broad-getzlab-workflows/cga_production_pipeline:v0.2
+
+%post
+    chmod 755 /root

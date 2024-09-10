@@ -1,0 +1,5 @@
+Bootstrap: docker
+From: broadinstitute/gatk:latest
+
+%post
+    chmod 755 /root

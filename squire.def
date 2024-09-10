@@ -1,0 +1,5 @@
+Bootstrap: docker
+From:lizatym/squire
+
+%post
+chmod 755 /root
